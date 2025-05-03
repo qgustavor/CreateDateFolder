@@ -1,6 +1,7 @@
 name: Build Windows GUI App with Icon
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -25,7 +26,7 @@ jobs:
           x86_64-w64-mingw32-gcc -Wall -O2 -mwindows src/main.c app_res.o -o CreateDateFolder.exe
 
       - name: Upload release artifact
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: CreateDateFolder.exe
         env:
