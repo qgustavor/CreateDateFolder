@@ -1,4 +1,4 @@
-name: Build Windows GUI App with Icon
+name: Build App
 
 on:
   workflow_dispatch:
@@ -24,14 +24,18 @@ jobs:
         run: |
           x86_64-w64-mingw32-windres src/app.rc -O coff -o app_res.o
 
-      - name: Build GUI .exe with icon
+      - name: Build exe
         run: |
           x86_64-w64-mingw32-gcc -Wall -O2 -mwindows src/main.c app_res.o -o CreateDateFolder.exe
+
+      - name: Create zip archive with .exe and .bat files
+        run: |
+          zip CreateDateFolder.zip CreateDateFolder.exe install.bat uninstall.bat
 
       - name: Upload release artifact
         uses: softprops/action-gh-release@v2
         with:
-          files: CreateDateFolder.exe
+          files: CreateDateFolder.zip
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
